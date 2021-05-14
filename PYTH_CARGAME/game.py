@@ -1,3 +1,5 @@
+# cd OneDrive\Desktop\PYTH_CARGAME
+
 import pygame
 import time
 import random
@@ -6,6 +8,12 @@ display_width = 800
 display_height = 600
 gray = (120, 120, 120)
 black = (0, 0, 0)
+red = (255, 0, 0)
+bright_red = (255, 40, 20)
+green = (125, 235, 52)
+bright_green = (132, 255, 0)
+blue = (20, 118, 255)
+bright_blue = (20, 185, 255)
 gamedisplays = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption("CAR GAME")
 clock = pygame.time.Clock()
@@ -13,6 +21,8 @@ carimage = pygame.image.load('car1.png')
 backgroundpic = pygame.image.load('grass.jpg')
 yellow_strip = pygame.image.load('yellow.png')
 strip = pygame.image.load('white line.png')
+intro_background = pygame.image.load('intro.jpg')
+#instruction_background = pygame.image.load('intro.jpg')
 car_width = 125
 
 def obstacle(obs_startx,obs_starty,obs):
@@ -32,6 +42,12 @@ def obstacle(obs_startx,obs_starty,obs):
 
 	gamedisplays.blit(obs_pic,(obs_startx,obs_starty))
 
+def score_system(passed,score):
+	font = pygame.font.SysFont(None,25)
+	text = font.render("Passed :"+str(passed),True,black)
+	score = font.render("Score :"+str(score),True,red)
+	gamedisplays.blit(text,(0,50))
+	gamedisplays.blit(score,(0,30))
 
 def text_objects(text,font):
 	textsurface = font.render(text,True,black)
@@ -85,6 +101,9 @@ def game_loop():
 	obs_starty = -750
 	obs_width = 60
 	obs_height = 115
+	passed = 0
+	level = 0
+	score = 0
 
 
 
@@ -99,8 +118,15 @@ def game_loop():
 			if event.type==pygame.KEYDOWN:
 				if event.key==pygame.K_LEFT:
 					x_change = -5
+
 				if event.key==pygame.K_RIGHT:
 					x_change = 5
+
+				if event.key==pygame.K_a:
+					obstacle_speed += 2
+
+				if event.key == pygame.K_b:
+					obstacle_speed -= 2
 
 			if event.type==pygame.KEYUP:
 				if event.key==pygame.K_LEFT or event.key==pygame.K_RIGHT:
@@ -116,6 +142,7 @@ def game_loop():
 		obstacle(obs_startx,obs_starty,obs)
 		obs_starty+=obstacle_speed
 		car(x,y)
+		score_system(passed,score)
 		#Dimensions are not that equal due to images
 		if x > 700 - car_width or x<90:
 			crash()
@@ -124,6 +151,20 @@ def game_loop():
 			obs_starty = 0 - obs_height
 			obs_startx = random.randrange(100,(display_width-210))
 			obs = random.randrange(0,6)
+			passed = passed + 1
+			score = passed*10
+			if int(passed)%10==0:
+				level = level+1
+				obstacle_speed = obstacle_speed + 2
+				largetext = pygame.font.Font("freesansbold.ttf",80)
+				textsurf,testrect = text_objects("Level :"+str(level),largetext)
+				testrect.center = ((display_width/2),(display_height/2))
+				gamedisplays.blit(textsurf,testrect)
+				pygame.display.update()
+				time.sleep(3)
+
+
+
 
 		if y < obs_starty + obs_height:#couldnt identify the bug
 			if x > obs_startx and x < obs_startx + obs_width or x + car_width > obs_startx and x + car_width < obs_startx + obs_width:
