@@ -105,9 +105,6 @@ def game_loop():
 	level = 0
 	score = 0
 
-
-
-
 	bumped=False
 	while not bumped:
 		for event in pygame.event.get():
@@ -134,8 +131,6 @@ def game_loop():
 
 		x+=x_change
 				
-
-
 		gamedisplays.fill(gray)
 		background()
 		obs_starty-=(obstacle_speed/4)
@@ -162,8 +157,6 @@ def game_loop():
 				gamedisplays.blit(textsurf,testrect)
 				pygame.display.update()
 				time.sleep(3)
-
-
 
 
 		if y < obs_starty + obs_height:#couldnt identify the bug
