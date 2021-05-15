@@ -22,7 +22,7 @@ backgroundpic = pygame.image.load('grass.jpg')
 yellow_strip = pygame.image.load('yellow.png')
 strip = pygame.image.load('white line.png')
 intro_background = pygame.image.load('intro.jpg')
-#instruction_background = pygame.image.load('intro.jpg')
+
 car_width = 125
 
 def obstacle(obs_startx,obs_starty,obs):
